@@ -561,6 +561,7 @@ void CMapView::HandleGotoLandmarkL()
 		CPosLandmark* lm = appUi->LandmarkDb()->ReadLandmarkLC(lmIdArray->At(chosenItem));
 		TLocality pos;
 		lm->GetPosition(pos);
+		MapControl()->SetFollowUser(EFalse);
 		MapControl()->MoveAndZoomIn(pos);
 		CleanupStack::PopAndDestroy(lm);
 		}
@@ -577,6 +578,7 @@ void CMapView::HandleGotoCoordinateL()
 	if(dlg->ExecuteLD(R_LOCATION_QUERY_DIALOG) == EAknSoftkeyOk)
 		{
 		coord.SetCoordinate(pos.Latitude(), pos.Longitude());
+		MapControl()->SetFollowUser(EFalse);
 		MapControl()->MoveAndZoomIn(coord);
 		}
 	}

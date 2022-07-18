@@ -64,3 +64,7 @@ CHARACTER_SET UTF8
 #define qtn_hide "Ukryj"
 #define qtn_signal_indicator "Wskaźnik sygnału GPS"
 #define qtn_scale_bar "Pasek skali"
+
+// Added in version 1.10.0:
+
+#define qtn_user_speed "Wskaźnik Prędkości"

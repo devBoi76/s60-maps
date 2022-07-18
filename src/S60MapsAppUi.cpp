@@ -505,6 +505,7 @@ void CS60MapsAppUi::OnPositionUpdated()
 		courseInfo->GetCourse(course);
 		
 		coord.SetCourse(course.Heading());
+		iMapView->MapControl()->SetUserSpeed(course.Speed());
 		}
 	coord.SetHorAccuracy(pos.HorizontalAccuracy());
 	iMapView->MapControl()->SetUserPosition(coord);

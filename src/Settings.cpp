@@ -30,7 +30,8 @@ CSettings::CSettings() :
 		iIsLandmarksVisible(EFalse),
 		iLanguage(ELangEnglish),
 		iIsSignalIndicatorVisible(ETrue),
-		iIsScaleBarVisible(ETrue)
+		iIsScaleBarVisible(ETrue),
+		iIsUserSpeedVisible(ETrue)
 	{
 	}
 
@@ -72,6 +73,9 @@ void CSettings::ExternalizeL(RWriteStream& aStream) const
 	// Added in version 1.8
 	aStream << (TInt8) iIsSignalIndicatorVisible; // No built-in bool to stream conversion
 	aStream << (TInt8) iIsScaleBarVisible;
+	
+	// Added in version 1.10.0
+	aStream << (TInt8) iIsUserSpeedVisible;
 	}
 
 void CSettings::DoInternalizeL(RReadStream& aStream)
@@ -79,7 +83,7 @@ void CSettings::DoInternalizeL(RReadStream& aStream)
 	// FixMe: Reads mess in new settings for old config file (make sure to validate them)
 	
 	TCardinality zoom, language;
-	TInt8 isLandmarksVisible, isSignalIndicatorVisible, isScaleBarVisible;
+	TInt8 isLandmarksVisible, isSignalIndicatorVisible, isScaleBarVisible, isUserSpeedVisible;
 	
 	aStream >> iLat;
 	aStream >> iLon;
@@ -98,6 +102,10 @@ void CSettings::DoInternalizeL(RReadStream& aStream)
 	iIsSignalIndicatorVisible = (TBool) isSignalIndicatorVisible;
 	aStream >> isScaleBarVisible;
 	iIsScaleBarVisible = (TBool) isScaleBarVisible;
+	
+	// Added in version 1.10.0
+	aStream >> isUserSpeedVisible;
+	iIsUserSpeedVisible = (TBool) isUserSpeedVisible;
 	}
 
 void CSettings::InternalizeL(RReadStream& aStream)

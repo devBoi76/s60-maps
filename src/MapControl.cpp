@@ -1,7 +1,8 @@
 /*
  ============================================================================
- Name		: MapControl.cpp
- Author	  : artem78
+ Name		 : MapControl.cpp
+ Author	  	 : artem78
+ Contributor : devBoi76
  Copyright   : 
  Description : Map control implementation
  ============================================================================
@@ -146,6 +147,22 @@ void CMapControl::ConstructL(const TRect& aRect, const TCoordinate &aInitialPosi
 	TInt r = screenDevice->/*GetNearestFontToMaxHeightInTwips*/ GetNearestFontInTwips(iDefaultFont, fontSpec);
 	User::LeaveIfError(r);
 	
+	// Prepare medium font
+	const TInt KMediumFontHeightInTwips = /*9*/ 240; // Twip = 1/12 point; 20 * 12
+	TFontSpec MediumFontSpec(KFontName, KMediumFontHeightInTwips);
+	MediumFontSpec.iTypeface.SetIsSerif(EFalse);
+	MediumFontSpec.iFontStyle.SetStrokeWeight(EStrokeWeightBold);
+	TInt rr = screenDevice->/*GetNearestFontToMaxHeightInTwips*/ GetNearestFontInTwips(iMediumFont, MediumFontSpec);
+	User::LeaveIfError(rr);
+	
+	// Prepare large font
+	const TInt KLargeFontHeightInTwips = /*9*/ 390; // Twip = 1/12 point; 32.5 * 12
+	TFontSpec LargeFontSpec(KFontName, KLargeFontHeightInTwips);
+	LargeFontSpec.iTypeface.SetIsSerif(EFalse);
+	LargeFontSpec.iFontStyle.SetStrokeWeight(EStrokeWeightBold);
+	TInt rrr = screenDevice->/*GetNearestFontToMaxHeightInTwips*/ GetNearestFontInTwips(iLargeFont, LargeFontSpec);
+	User::LeaveIfError(rrr);
+	
 	// Create layers
 	iLayers = RPointerArray<CMapLayerBase>(10);
 	iLayers.Append(CTiledMapLayer::NewL(this, aTileProvider));
@@ -160,6 +177,7 @@ void CMapControl::ConstructL(const TRect& aRect, const TCoordinate &aInitialPosi
 #endif
 	iLayers.Append(new (ELeave) CCrosshairLayer(this));
 	iLayers.Append(CSignalIndicatorLayer::NewL(this));
+	iLayers.Append(CSpeedDisplayLayer::NewL(this));
 	
 	SetTileProviderL(aTileProvider);
 
@@ -212,6 +230,9 @@ CMapControl::~CMapControl()
 	iMovementRepeater = NULL;
 	
 	CCoeEnv::Static()->ScreenDevice()->ReleaseFont(iDefaultFont);
+	CCoeEnv::Static()->ScreenDevice()->ReleaseFont(iMediumFont);
+	CCoeEnv::Static()->ScreenDevice()->ReleaseFont(iLargeFont);
+
 	}
 
 // -----------------------------------------------------------------------------
@@ -765,6 +786,10 @@ void CMapControl::SetUserPosition(const TCoordinateEx& aPos)
 	iUserPosition = aPos;
 	ShowUserPosition();
 	}
+void CMapControl::SetUserSpeed(const TReal32& aSpeed)
+	{
+	iUserSpeed = aSpeed;
+	}
 
 TInt CMapControl::UserPosition(TCoordinateEx& aPos)
 	{
@@ -772,6 +797,12 @@ TInt CMapControl::UserPosition(TCoordinateEx& aPos)
 		return KErrNotFound;
 	
 	aPos = iUserPosition;
+	return KErrNone;
+	}
+
+TInt CMapControl::UserSpeed(TReal32& aSpeed)
+	{
+	aSpeed = iUserSpeed;
 	return KErrNone;
 	}
 

@@ -72,6 +72,7 @@ public:
 	TLanguage iLanguage;
 	TBool iIsSignalIndicatorVisible;
 	TBool iIsScaleBarVisible;
+	TBool iIsUserSpeedVisible;
 	
 public:
 	CSettings();

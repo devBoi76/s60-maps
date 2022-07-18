@@ -3,6 +3,7 @@
  *
  *  Created on: 14.08.2019
  *      Author: artem78
+ *      Contributor: devBoi76
  */
 
 #include "Map.h"
@@ -489,7 +490,91 @@ void CTileBorderAndXYZLayer::DrawTile(CWindowGc &aGc, const TTile &aTile)
 	}
 #endif
 
+// CSpeedDisplayLayer
 
+CSpeedDisplayLayer::CSpeedDisplayLayer(CMapControl* aMapView):
+		CMapLayerBase(aMapView)
+	{
+	}
+
+CSpeedDisplayLayer::~CSpeedDisplayLayer()
+	{
+	}
+
+CSpeedDisplayLayer* CSpeedDisplayLayer::NewLC(CMapControl* aMapView)
+	{
+	CSpeedDisplayLayer* self = new (ELeave) CSpeedDisplayLayer(aMapView);
+	CleanupStack::PushL(self);
+	self->ConstructL();
+	return self;
+	}
+
+CSpeedDisplayLayer* CSpeedDisplayLayer::NewL(CMapControl* aMapView)
+	{
+	CSpeedDisplayLayer* self = CSpeedDisplayLayer::NewLC(aMapView);
+	CleanupStack::Pop(); // self;
+	return self;
+	}
+
+void CSpeedDisplayLayer::ConstructL()
+	{
+	// Read strings from resources
+	ReloadStringsFromResourceL();
+	}
+
+void CSpeedDisplayLayer::Draw(CWindowGc &aGc)
+	{
+	CS60MapsAppUi* appUi = static_cast<CS60MapsAppUi*>(CCoeEnv::Static()->AppUi());
+	
+	if (!appUi->Settings()->iIsUserSpeedVisible) // Check display or not
+		return;
+
+	TReal32 speed;
+	iMapView->UserSpeed(speed);
+	if (speed != speed) // is NaN
+		speed = 0;
+	const TInt KDisplayLeftMargin = 14;
+	const TInt KDisplayTopMargin = KDisplayLeftMargin;
+
+	TRealFormat realFmt = TRealFormat(4, 1);
+
+	TBuf<32> speedText;
+	TBuf<32> unitText;
+	speedText.Num(speed*3.6, realFmt); // 1m/s = 3.6km/h
+	unitText.Append('k');
+	unitText.Append('m');
+	unitText.Append('/');
+	unitText.Append('h');
+			
+	TPoint startSpeedPoint = TPoint(KDisplayLeftMargin, KDisplayTopMargin + iMapView->LargeFont()->AscentInPixels());
+	
+	const CFont* largeFont = iMapView->LargeFont(); 
+	
+	TPoint startUnitPoint = startSpeedPoint;
+	startUnitPoint.iX += largeFont->TextWidthInPixels(speedText);
+		
+	aGc.UseFont(largeFont);
+	aGc.DrawText(speedText, startSpeedPoint);
+	aGc.DiscardFont();
+	aGc.UseFont(iMapView->MediumFont());
+	aGc.DrawText(unitText, startUnitPoint);
+	aGc.DiscardFont();
+	}
+
+void CSpeedDisplayLayer::ReloadStringsFromResourceL()
+	{
+	// Free previous loaded strings
+	delete iMetersUnit;
+	delete iKilometersUnit;
+	
+	iMetersUnit = NULL;
+	iKilometersUnit = NULL;
+	
+	iMetersUnit = CCoeEnv::Static()->AllocReadResourceL(R_METERS_UNIT_SHORT);
+	iKilometersUnit = CCoeEnv::Static()->AllocReadResourceL(R_KILOMETERS_UNIT_SHORT);
+	
+	DEBUG(_L("Loaded strings: %S, %S"), &*iMetersUnit, &*iKilometersUnit);
+	}
 // CScaleBarLayer
 
 CScaleBarLayer::CScaleBarLayer(CMapControl* aMapView):

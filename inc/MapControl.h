@@ -1,7 +1,8 @@
 /*
  ============================================================================
- Name		: MapControl.h
- Author	  : artem78
+ Name		 : MapControl.h
+ Author	  	 : artem78
+ Contributor : devBoi76
  Copyright   : 
  Description : Declares map control
  ============================================================================
@@ -162,6 +163,7 @@ private:
 	RPointerArray<CMapLayerBase> iLayers;
 	
 	TCoordinateEx iUserPosition;
+	TReal32 iUserSpeed;
 	TBool iIsUserPositionRecieved; // Todo: Redundant flag - iUserPosition with lat=NaN and lon=NaN can indicates unknown position 
 	TBool iIsFollowUser;
 	TBool iIsUserPositionVisiblePrev; // Todo: Redundant?
@@ -184,6 +186,8 @@ private:
 	TBool iIsCrosshairVisible;
 	CPeriodic* /*iUserInactivityTimer*/ iCrosshairAutoHideTimer;
 	CFont* iDefaultFont;
+	CFont* iMediumFont;
+	CFont* iLargeFont;
 	
 	void Move(const TPoint &aPoint, TBool savePos = ETrue); // Used by all another Move methods
 public:
@@ -231,7 +235,9 @@ public:
 	void Bounds(TTile &aTopLeftTile, TTile &aBottomRightTile) const;
 	
 	void SetUserPosition(const TCoordinateEx& aPos);
+	void SetUserSpeed(const TReal32& aSpeed);
 	TInt UserPosition(TCoordinateEx& aPos);
+	TInt UserSpeed(TReal32& aSpeed);
 	void ShowUserPosition();
 	void HideUserPosition();
 	void SetFollowUser(TBool anEnabled = ETrue);
@@ -244,6 +250,10 @@ public:
 	void ReloadVisibleAreaL();
 	inline const CFont* DefaultFont() const
 		{ return iDefaultFont; };
+	inline const CFont* MediumFont() const
+			{ return iMediumFont; };
+	inline const CFont* LargeFont() const
+		{ return iLargeFont; };
 
 	};
 	

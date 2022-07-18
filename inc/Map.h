@@ -3,6 +3,7 @@
  *
  *  Created on: 14.08.2019
  *      Author: artem78
+ *      Contributor: devBoi76
  */
 
 #ifndef MAP_H_
@@ -151,6 +152,37 @@ private:
 	};
 #endif
 
+
+//---------------
+//Start
+//---------------
+class CSpeedDisplayLayer : public CMapLayerBase
+	{
+	// Constructor / destructor
+public:
+	~CSpeedDisplayLayer();
+	static CSpeedDisplayLayer* NewL(CMapControl* aMapView);
+	static CSpeedDisplayLayer* NewLC(CMapControl* aMapView);
+	
+private:
+	CSpeedDisplayLayer(CMapControl* aMapView);
+	void ConstructL();
+	
+	// From CMapLayerBase
+public:
+	void Draw(CWindowGc &aGc);
+	
+	// Own
+private:
+	HBufC* iMetersUnit;
+	HBufC* iKilometersUnit;
+	
+public:
+	void ReloadStringsFromResourceL();
+	//---------------
+	//END
+	//---------------
+	};
 
 class CScaleBarLayer : public CMapLayerBase
 	{

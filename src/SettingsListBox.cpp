@@ -44,6 +44,13 @@ CAknSettingItem* CSettingsListBox::CreateSettingItemL(TInt aSettingId)
 								appUi->Settings()->iIsScaleBarVisible);
 			}
 			break;
+		
+		case ESettingShowUserSpeed:
+			{
+			settingItem = new (ELeave) CAknBinaryPopupSettingItem(aSettingId,
+					appUi->Settings()->iIsUserSpeedVisible);
+			}
+			break;
 		}
 	
 	return settingItem;

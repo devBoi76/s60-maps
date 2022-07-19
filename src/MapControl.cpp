@@ -2,7 +2,6 @@
  ============================================================================
  Name		 : MapControl.cpp
  Author	  	 : artem78
- Contributor : devBoi76
  Copyright   : 
  Description : Map control implementation
  ============================================================================
@@ -18,6 +17,7 @@
 #include "S60MapsAppUi.h"
 #include "S60Maps.hrh"
 #include "MapView.h"
+#include "TrackingController.h"
 
 // Constants
 const TInt KMovementRepeaterInterval = 200000;
@@ -176,9 +176,11 @@ void CMapControl::ConstructL(const TRect& aRect, const TCoordinate &aInitialPosi
 	iLayers.Append(CMapLayerDebugInfo::NewL(this));
 #endif
 	iLayers.Append(new (ELeave) CCrosshairLayer(this));
-	iLayers.Append(CSignalIndicatorLayer::NewL(this));
+	iLayers.Append(CSignalIndicatorLayer::NewL(this));	
 	iLayers.Append(CSpeedDisplayLayer::NewL(this));
 	
+	iLayers.Append(CTraveledDisplayLayer::NewL(this));
+
 	SetTileProviderL(aTileProvider);
 
 	// Periodic timer for repeating the movement at holding (touch interface)

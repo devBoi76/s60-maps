@@ -51,6 +51,12 @@ CAknSettingItem* CSettingsListBox::CreateSettingItemL(TInt aSettingId)
 					appUi->Settings()->iIsUserSpeedVisible);
 			}
 			break;
+		case ESettingShowDistanceTraveled:
+			{
+			settingItem = new (ELeave) CAknBinaryPopupSettingItem(aSettingId,
+					appUi->Settings()->iIsDistanceTraveledVisible);
+			}
+			break;
 		}
 	
 	return settingItem;

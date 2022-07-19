@@ -73,6 +73,7 @@ public:
 	TBool iIsSignalIndicatorVisible;
 	TBool iIsScaleBarVisible;
 	TBool iIsUserSpeedVisible;
+	TBool iIsDistanceTraveledVisible;
 	
 public:
 	CSettings();

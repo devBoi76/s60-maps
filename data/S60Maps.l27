@@ -67,4 +67,5 @@ CHARACTER_SET UTF8
 
 // Added in version 1.10.0:
 
-#define qtn_user_speed "Wskaźnik Prędkości"
+#define qtn_user_speed "Wskaźnik prędkości"
+#define qtn_distance_traveled "Wskaźnik przebytej odległości"

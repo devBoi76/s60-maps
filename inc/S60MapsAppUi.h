@@ -155,6 +155,9 @@ private:
 	CAsyncFileMan* iFileMan;
 	CPositionRequestor* iPosRequestor;
 	
+	// Route tracking
+	CTrackingController* iTrackingController;
+	
 	CRemConInterfaceSelector* iInterfaceSelector;
 	CRemConCoreApiTarget* iCoreTarget;
 	
@@ -203,6 +206,9 @@ public:
 	
 	inline CSettingsView* SettingsView()
 			{ return iSettingsView; }
+	
+	inline CTrackingController* TrackingController()
+			{ return iTrackingController; };
 	
 	inline const TPositionSatelliteInfo* SatelliteInfo()
 			{ return IsPositioningAvailable() && iPosRequestor->LastKnownPositionInfo()->PositionClassType() & EPositionSatelliteInfoClass ?

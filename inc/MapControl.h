@@ -2,7 +2,6 @@
  ============================================================================
  Name		 : MapControl.h
  Author	  	 : artem78
- Contributor : devBoi76
  Copyright   : 
  Description : Declares map control
  ============================================================================

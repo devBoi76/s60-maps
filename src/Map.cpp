@@ -3,7 +3,6 @@
  *
  *  Created on: 14.08.2019
  *      Author: artem78
- *      Contributor: devBoi76
  */
 
 #include "Map.h"
@@ -25,6 +24,8 @@
 #include "icons.mbg"
 #include "Utils.h"
 #include "LBSSatelliteExtended.h"
+#include "MapView.h"
+#include "TrackingController.h"
 
 CMapLayerBase::CMapLayerBase(/*const*/ CMapControl* aMapView) :
 		iMapView(aMapView)
@@ -490,6 +491,109 @@ void CTileBorderAndXYZLayer::DrawTile(CWindowGc &aGc, const TTile &aTile)
 	}
 #endif
 
+// CTraveledDisplayLayer
+
+CTraveledDisplayLayer::CTraveledDisplayLayer(CMapControl* aMapView):
+		CMapLayerBase(aMapView)
+	{
+	}
+
+CTraveledDisplayLayer::~CTraveledDisplayLayer()
+	{
+	}
+
+CTraveledDisplayLayer* CTraveledDisplayLayer::NewLC(CMapControl* aMapView)
+	{
+	DEBUG(_L("Got To NewLC1"));
+	CTraveledDisplayLayer* self = new (ELeave) CTraveledDisplayLayer(aMapView);
+	CleanupStack::PushL(self);
+	self->ConstructL();
+	DEBUG(_L("Got To NewLC2"));
+	return self;
+	}
+
+CTraveledDisplayLayer* CTraveledDisplayLayer::NewL(CMapControl* aMapView)
+	{
+	
+	CTraveledDisplayLayer* self = CTraveledDisplayLayer::NewLC(aMapView);
+	CleanupStack::Pop(); // self;
+	DEBUG(_L("Got To NewL2"));
+	return self;
+	}
+
+void CTraveledDisplayLayer::ConstructL()
+	{
+	DEBUG(_L("Got To ConstructL1"));
+	ReloadStringsFromResourceL();
+	DEBUG(_L("Got To ConstructL2"));
+	}
+
+void CTraveledDisplayLayer::Draw(CWindowGc &aGc)
+	{
+	CS60MapsAppUi* appUi = static_cast<CS60MapsAppUi*>(CCoeEnv::Static()->AppUi());
+	
+	if (!appUi->Settings()->iIsDistanceTraveledVisible) // Check display or not
+		return;
+
+	DEBUG(_L("iThisRouteDistance"));
+	TReal32 distance;
+	appUi->TrackingController()->ThisRouteDistance(distance);
+	DEBUG(_L("iThisRouteDistance = %f"), distance);
+	TReal32 displayNum = distance;
+
+	if (distance != distance) // is NaN
+		distance = 0;
+	
+	TBool kilometers = false; // unit
+	if (distance >= 1000) {
+		kilometers = true;
+		displayNum = distance/1000;
+	}
+	
+	const CFont* mediumFont = iMapView->MediumFont(); 			
+	const CFont* largeFont = iMapView->LargeFont(); 
+	
+	const TInt KDisplayLeftMargin = 14;
+	TInt KDisplayTopMargin = KDisplayLeftMargin; 
+
+	if (appUi->Settings()->iIsUserSpeedVisible)// top margin + speed display margin
+		KDisplayTopMargin += 26 + largeFont->AscentInPixels()/2;
+
+	TRealFormat realFmt = TRealFormat(5, 1);
+	
+	TBuf<32> distanceText;
+	distanceText.Num(displayNum, realFmt);
+	
+	if (kilometers) {		
+		distanceText.Append('k');
+		distanceText.Append('m');
+	} else {
+		distanceText.Append('m');
+	}
+
+	TPoint startTextPoint = TPoint(KDisplayLeftMargin, KDisplayTopMargin + mediumFont->AscentInPixels());
+	
+	aGc.UseFont(mediumFont);
+	aGc.DrawText(distanceText, startTextPoint);
+	aGc.DiscardFont();
+	}
+
+void CTraveledDisplayLayer::ReloadStringsFromResourceL()
+	{
+	// Free previous loaded strings
+	delete iMetersUnit;
+	delete iKilometersUnit;
+	
+	iMetersUnit = NULL;
+	iKilometersUnit = NULL;
+	
+	iMetersUnit = CCoeEnv::Static()->AllocReadResourceL(R_METERS_UNIT_SHORT);
+	iKilometersUnit = CCoeEnv::Static()->AllocReadResourceL(R_KILOMETERS_UNIT_SHORT);
+	
+	DEBUG(_L("Loaded strings: %S, %S"), &*iMetersUnit, &*iKilometersUnit);
+	}
+
+
 // CSpeedDisplayLayer
 
 CSpeedDisplayLayer::CSpeedDisplayLayer(CMapControl* aMapView):
@@ -537,6 +641,7 @@ void CSpeedDisplayLayer::Draw(CWindowGc &aGc)
 	const TInt KDisplayTopMargin = KDisplayLeftMargin;
 
 	TRealFormat realFmt = TRealFormat(4, 1);
+	//TRealFormat realFmt = TRealFormat();
 
 	TBuf<32> speedText;
 	TBuf<32> unitText;

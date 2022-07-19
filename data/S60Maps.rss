@@ -552,7 +552,15 @@ RESOURCE AVKON_SETTING_ITEM_LIST r_setting_item_list
 			setting_page_resource = r_show_user_speed_setting_page;
 			associated_resource = r_popup_setting_show_user_speed_texts;
 			name = qtn_user_speed;
+			},
+		AVKON_SETTING_ITEM
+			{
+			identifier = ESettingShowDistanceTraveled;
+			setting_page_resource = r_show_distance_traveled_setting_page;
+			associated_resource = r_popup_setting_show_distance_traveled_texts;
+			name = qtn_distance_traveled;
 			}
+
 		};
 	}
 
@@ -662,6 +670,30 @@ RESOURCE AVKON_POPUP_SETTING_TEXTS r_popup_setting_show_user_speed_texts
     }
 
 RESOURCE ARRAY r_show_user_speed_texts
+    {
+    items =
+        {
+        AVKON_ENUMERATED_TEXT { value=1; text = qtn_show; },
+        AVKON_ENUMERATED_TEXT { value=0; text = qtn_hide; }
+        };
+    }
+
+// Show user distance traveled setting
+
+RESOURCE AVKON_SETTING_PAGE r_show_distance_traveled_setting_page
+    {   
+    number = 0;
+    label = qtn_distance_traveled;
+    type = EAknCtPopupSettingList;
+    }
+
+RESOURCE AVKON_POPUP_SETTING_TEXTS r_popup_setting_show_distance_traveled_texts
+    {
+    flags = 0;
+    setting_texts_resource = r_show_distance_traveled_texts;
+    }
+
+RESOURCE ARRAY r_show_distance_traveled_texts
     {
     items =
         {

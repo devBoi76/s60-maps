@@ -12,6 +12,7 @@
 
 #include <aknview.h>
 #include "MapControl.h"
+#include "TrackingController.h"
 
 
 // Classes
@@ -53,7 +54,13 @@ public:
 	inline CMapControl* MapControl()
 				{ return iMapControl; };
 	
+	//inline CTrackingController* TrackingController()
+	//			{ return iTrackingController; };
+	
 private:
+	// Route tracking
+	//CTrackingController* iTrackingController;
+	
 	// Controls
 	CMapControl* iMapControl;
 	

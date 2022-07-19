@@ -146,6 +146,9 @@ void CS60MapsAppUi::ConstructL()
 	iLandmarksDb->SetPartialReadParametersL(*iLandmarkPartialParameters);
 
 	
+	// Create route tracking objects
+	
+	
 	// Create view objects
 	iMapView = CMapView::NewL();
 	//iMapView->MapControl()->MakeVisible(EFalse); // Will be shown later after settings will be loaded in CS60MapsAppUi::RestoreL
@@ -154,6 +157,10 @@ void CS60MapsAppUi::ConstructL()
 
 	iSettingsView = CSettingsView::NewL();
 	AddViewL(iSettingsView);
+	
+	// Initialize route tracking
+	iTrackingController = CTrackingController::NewL();
+
 	
 	// Position requestor
 	_LIT(KPosRequestorName, "S60 Maps"); // ToDo: Move to global const
@@ -509,6 +516,7 @@ void CS60MapsAppUi::OnPositionUpdated()
 		}
 	coord.SetHorAccuracy(pos.HorizontalAccuracy());
 	iMapView->MapControl()->SetUserPosition(coord);
+	TrackingController()->UpdatePosition(coord);
 	}
 
 void CS60MapsAppUi::OnPositionPartialUpdated()

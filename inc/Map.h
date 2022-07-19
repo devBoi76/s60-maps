@@ -3,7 +3,6 @@
  *
  *  Created on: 14.08.2019
  *      Author: artem78
- *      Contributor: devBoi76
  */
 
 #ifndef MAP_H_
@@ -23,7 +22,7 @@
 #include <e32msgqueue.h>
 #include <epos_cposlandmarkdatabase.h>
 #include <akniconutils.h> // For CAknIcon
-
+#include "TrackingController.h"
 
 // Constants
 const TReal64 KMinLatitudeMapBound = -85.051129;
@@ -157,6 +156,36 @@ private:
 //---------------
 //Start
 //---------------
+
+class CTraveledDisplayLayer : public CMapLayerBase
+	{
+	// Constructor / destructor
+public:
+	~CTraveledDisplayLayer();
+	static CTraveledDisplayLayer* NewL(CMapControl* aMapView);
+	static CTraveledDisplayLayer* NewLC(CMapControl* aMapView);
+	
+private:
+	CTraveledDisplayLayer(CMapControl* aMapView);
+	void ConstructL();
+	
+	// From CMapLayerBase
+public:
+	void Draw(CWindowGc &aGc);
+	
+	// Own
+private:
+	HBufC* iMetersUnit;
+	HBufC* iKilometersUnit;
+	
+public:
+	void ReloadStringsFromResourceL();
+	//---------------
+	//END
+	//---------------
+	};
+
+
 class CSpeedDisplayLayer : public CMapLayerBase
 	{
 	// Constructor / destructor

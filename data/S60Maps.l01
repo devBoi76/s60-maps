@@ -67,3 +67,4 @@
 // Added in version 1.10.0:
 
 #define qtn_user_speed "Speed Display"
+#define qtn_distance_traveled "Distance Traveled Display"

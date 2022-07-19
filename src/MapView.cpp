@@ -19,8 +19,6 @@
 #include <aknselectionlist.h>
 #include <akntitle.h>
 
-#include "TrackingController.h"
-
 // CMapView
 
 CMapView::CMapView()
@@ -30,7 +28,6 @@ CMapView::CMapView()
 CMapView::~CMapView()
 	{
 	delete iMapControl;
-	//delete iTrackingController;
 	}
 
 CMapView* CMapView::NewLC()
@@ -58,9 +55,6 @@ void CMapView::ConstructL()
 	// Set initial map position
 	TCoordinate position = TCoordinate(settings->GetLat(), settings->GetLon());
 	TZoom zoom = settings->GetZoom();
-	
-	// Initialize route tracking
-	//iTrackingController = CTrackingController::NewL();
 	
 	// Initialize control
 	iMapControl = CMapControl::NewL(ClientRect(), position, zoom, appUi->TileProvider());
